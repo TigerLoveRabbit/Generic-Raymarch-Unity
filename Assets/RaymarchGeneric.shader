@@ -1,4 +1,6 @@
-﻿Shader "Hidden/RaymarchGeneric"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Hidden/RaymarchGeneric"
 {
 	Properties
 	{
@@ -62,7 +64,7 @@
 				half index = v.vertex.z;
 				v.vertex.z = 0.1;
 				
-				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv.xy;
 				
 				#if UNITY_UV_STARTS_AT_TOP
