@@ -31,9 +31,9 @@ Shader "Hidden/RaymarchGeneric"
 			uniform sampler2D _MainTex;
 			uniform float4 _MainTex_TexelSize;
 
-			uniform float4x4 _CameraInvViewMatrix;
-			uniform float4x4 _FrustumCornersES;
-			uniform float4 _CameraWS;
+			uniform float4x4 _CameraInvViewMatrix; //convert the rays from eye space to world space
+			uniform float4x4 _FrustumCornersES;//corner rays
+			uniform float4 _CameraWS; //the camera’s position
 
 			uniform float3 _LightDir;
 			uniform float4x4 _MatTorus_InvModel;

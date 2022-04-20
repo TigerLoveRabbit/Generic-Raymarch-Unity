@@ -205,7 +205,11 @@ public class RaymarchGeneric : SceneViewFilter
     /// Aspect Ratio of Camera = FrustumWidth / FrustumHeight.
     /// </summary>
     /// <param name="cam"></param>
-    /// <returns></returns>
+    /// <returns>returns the frustum corner rays in eye space. 
+    /// This means that (0,0,0) is assumed to be the camera’s position
+    /// , and the rays themselves are from the Camera’s point of view 
+    /// (instead of, for example, worldspace).
+    /// </returns>
     private Matrix4x4 GetOptimizedFrustumCorners(Camera cam)
     {
         float halfFOVInRadians = (cam.fieldOfView / 2) * Mathf.Deg2Rad;
@@ -243,6 +247,8 @@ public class RaymarchGeneric : SceneViewFilter
         frustumCorners.SetRow(2, bottomRight);
         frustumCorners.SetRow(3, bottomLeft);
 
+        //(0,0,0) is assumed to be the camera's position.
+        //
         return frustumCorners;
     }
 
