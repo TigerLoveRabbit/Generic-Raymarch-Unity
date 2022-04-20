@@ -130,6 +130,10 @@ public class RaymarchGeneric : SceneViewFilter
     /// Bottom Left corner:  row=3
     private Matrix4x4 GetFrustumCorners(Camera cam)
     {
+        //MOCK START
+        return GetOptimizedFrustumCorners(cam);
+        //MOCK END
+
         float camFov = cam.fieldOfView;
         float camAspect = cam.aspect;
 
@@ -195,6 +199,51 @@ public class RaymarchGeneric : SceneViewFilter
         
         GL.End();
         GL.PopMatrix();
+    }
+    /// <summary>
+    /// Tangent(FOV/2)  = (Frustum height/2) / (distance);
+    /// Aspect Ratio of Camera = FrustumWidth / FrustumHeight.
+    /// </summary>
+    /// <param name="cam"></param>
+    /// <returns></returns>
+    private Matrix4x4 GetOptimizedFrustumCorners(Camera cam)
+    {
+        float halfFOVInRadians = (cam.fieldOfView / 2) * Mathf.Deg2Rad;
+        float halfFrustumHeight = Mathf.Tan(halfFOVInRadians);
+        float halfFrustumWidth = halfFrustumHeight * cam.aspect;
+
+        Vector3 cameraForward = -Vector3.forward;
+        Vector3 cameraRight = Vector3.right;
+        Vector3 cameraUp = Vector3.up;
+
+        Matrix4x4 frustumCorners = Matrix4x4.identity;
+
+        Vector3 toRight = cameraRight * halfFrustumWidth;
+        Vector3 toTop = cameraUp * halfFrustumHeight;
+
+        //The vector of (camera pos, topRight corner of image) can be divided into 3 sections of movements.
+        //We can assume the distance between you and the image is 1.(unit distance)
+        //Image you move forward at a distance of 1.(Vector3.forward)
+        //Then you move right up to the right border of the image.(Vector)
+        //Then continue to move up util you arrive the corner of the image.
+
+        /*
+        Q: Why is ***-Vector3.forward*** here rather than Vector3.forward ? 
+        A: Note that camera space matches OpenGL convention: camera's forward is the negative Z axis.
+           This is different from Unity's convention, where forward is the positive Z axis.
+        */
+
+        Vector3 topLeft = (cameraForward - toRight + toTop);
+        Vector3 topRight = (cameraForward + toRight + toTop);
+        Vector3 bottomRight = (cameraForward + toRight - toTop);
+        Vector3 bottomLeft = (cameraForward - toRight - toTop);
+
+        frustumCorners.SetRow(0, topLeft);
+        frustumCorners.SetRow(1, topRight);
+        frustumCorners.SetRow(2, bottomRight);
+        frustumCorners.SetRow(3, bottomLeft);
+
+        return frustumCorners;
     }
 
 }
