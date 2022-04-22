@@ -186,16 +186,16 @@ public class RaymarchGeneric : SceneViewFilter
         // GL.Vertex3(x,y,z) queues up a vertex at position (x, y, z) to be drawn.  Note that we are storing
         // our own custom frustum information in the z coordinate.
         GL.MultiTexCoord2(0, 0.0f, 0.0f);
-        GL.Vertex3(0.0f, 0.0f, 3.0f); // BL
+        GL.Vertex3(0.0f, 0.0f, 3.0f); // BL-Bottom Left
 
         GL.MultiTexCoord2(0, 1.0f, 0.0f);
-        GL.Vertex3(1.0f, 0.0f, 2.0f); // BR
+        GL.Vertex3(1.0f, 0.0f, 2.0f); // BR-Bottom Right
 
         GL.MultiTexCoord2(0, 1.0f, 1.0f);
-        GL.Vertex3(1.0f, 1.0f, 1.0f); // TR
+        GL.Vertex3(1.0f, 1.0f, 1.0f); // TR-Top Right
 
         GL.MultiTexCoord2(0, 0.0f, 1.0f);
-        GL.Vertex3(0.0f, 1.0f, 0.0f); // TL
+        GL.Vertex3(0.0f, 1.0f, 0.0f); // TL-Top Left
         
         GL.End();
         GL.PopMatrix();
